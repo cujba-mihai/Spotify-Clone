@@ -9,18 +9,19 @@ import {
 } from '@heroicons/react/outline'
 import { useSession } from 'next-auth/react'
 import useSpotify from '../hooks/useSpotify.js'
-import { useRecoilState } from "recoil";
-import { playlistIdState } from "../atoms/playlistAtom";
+import { useRecoilState } from 'recoil'
+import { playlistIdState } from '../atoms/playlistAtom'
 
 function Sidebar() {
-  const spotifyApi = useSpotify();
-  const { data: session, status } = useSession();
-  const [playlists, setPlaylists] = useState([]);
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const spotifyApi = useSpotify()
+  const { data: session, status } = useSession()
+  const [playlists, setPlaylists] = useState([])
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.getUserPlaylists()
+      spotifyApi
+        .getUserPlaylists()
         .then((playlists) => {
           setPlaylists(playlists.body.items)
         })
@@ -30,9 +31,9 @@ function Sidebar() {
 
   return (
     <div
-      className="h-screen min-w-[30ch] overflow-y-scroll border-r border-gray-900 
-    p-5  text-gray-500 scrollbar-hide
-    text-sm lg:text-sm sm:max-w-[12rem] hidden md:inline-flex lg:max-w-[15rem]
+      className="hidden h-screen min-w-[30ch] overflow-y-scroll border-r 
+    border-gray-900  p-5 pb-36
+    text-sm text-gray-500 scrollbar-hide sm:max-w-[12rem] md:inline-flex lg:max-w-[15rem] lg:text-sm
     "
     >
       <div className="space-y-4">
@@ -73,10 +74,16 @@ function Sidebar() {
 
         {playlists.length
           ? playlists.map((playlist) => (
-            <p key={playlist.id} onClick={() => setPlaylistId(playlist.id)} className="cursor-pointer min-w-[30ch] hover:text-white">
-              {playlist.name.length > 27 ? playlist.name.slice(0, 29) + "..." : playlist.name}
-            </p>
-          ))
+              <p
+                key={playlist.id}
+                onClick={() => setPlaylistId(playlist.id)}
+                className="min-w-[30ch] cursor-pointer hover:text-white"
+              >
+                {playlist.name.length > 27
+                  ? playlist.name.slice(0, 29) + '...'
+                  : playlist.name}
+              </p>
+            ))
           : null}
       </div>
     </div>

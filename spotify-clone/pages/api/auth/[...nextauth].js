@@ -43,7 +43,9 @@ export default NextAuth({
   ],
   secret: process.env.JWT_SECRET,
   pages: {
-    signIn: "/login"
+    signIn: "/login",
+    signOut: "/login",
+    verifyRequest: "/login"
   },
   callbacks: {
     async jwt({ token, account, user }) {

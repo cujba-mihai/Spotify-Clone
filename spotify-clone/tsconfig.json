@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/login.js", "pages/api/auth/[...nextauth].ts", "components/Center.jsx", "hooks/useSpotify.tsx", "components/Sidebar.jsx", "hooks/useSpotify.js", "components/Center.js", "pages/index.js", "pages/_app.js", "pages/api/hello.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/login.js", "pages/api/auth/[...nextauth].ts", "components/Center.jsx", "hooks/useSpotify.tsx", "components/Sidebar.jsx", "hooks/useSpotify.js", "components/Center.jsx", "pages/index.js", "pages/_app.js", "pages/api/hello.js"],
   "exclude": ["node_modules"]
 }

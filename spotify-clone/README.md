@@ -1,3 +1,18 @@
+# Tools used:
+  1. NextJS
+  2. ReactJS
+  3. Debounce (lodash)
+  4. Tailwind CSS
+  5. Spotify API
+  6. oAuth JWT
+    6.1 Access/refresh tokens
+  7. Recoil
+ 
+ # In order for this app to run properly, please make sure you have an open window with the original Spotify website open https://open.spotify.com/
+ 
+ 
+
+
 # Next.js + Tailwind CSS Example
 
 This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.0)](https://tailwindcss.com/blog/tailwindcss-v3) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).

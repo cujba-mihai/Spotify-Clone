@@ -6,7 +6,7 @@ import {
   PlusCircleIcon,
   HeartIcon,
   RssIcon,
-} from '@heroicons/react/outline'
+} from '@heroicons/react/solid'
 import { useSession } from 'next-auth/react'
 import useSpotify from '../hooks/useSpotify.js'
 import { useRecoilState } from 'recoil'

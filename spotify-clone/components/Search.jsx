@@ -37,17 +37,21 @@ function Search() {
     if (searchInput.length > 1) {
       debouncedSearch(searchInput)
     }
+
+    if (!searchInput.length) {
+      setSearchResults([])
+    }
   }, [searchInput])
 
   return (
     <div className="w-full flex-col items-center space-y-2 space-x-2 py-20 px-8 md:p-8">
       {showSearch ? (
-        <div className=" flex items-center pl-4 pr-4">
-          <SearchIcon className="absolute left-14 h-5 w-5 md:left-80 md:top-12" />
+        <div className=" relative flex items-center pl-4 pr-4">
+          <SearchIcon className="absolute left-6 h-5 w-5 md:left-12 md:top-4 " />
           <input
             onChange={handleInput}
             type="text"
-            className="w-full rounded-full py-2 pl-8 pr-5 focus:outline-gray-500 md:ml-5 md:mb-6 md:max-w-[25vw] md:py-3 md:pl-10"
+            className="sm:width-full w-full rounded-full py-2 pl-8 pr-5 focus:outline-gray-500 md:ml-5 md:mb-6 md:max-w-[25vw] md:py-3 md:pl-10"
             placeholder="Search for songs, albums, artists"
           />
         </div>

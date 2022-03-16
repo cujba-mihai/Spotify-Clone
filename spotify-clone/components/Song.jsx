@@ -44,7 +44,7 @@ function Song({ order, track }) {
           alt=""
         />
         <div>
-          <p className="w-36 truncate text-white lg:w-64">
+          <p className="w-24 truncate text-white sm:w-36 lg:w-64">
             {!!track.track?.album ? track.track.name : track.name}
           </p>
           <p className="w-40">
@@ -59,7 +59,7 @@ function Song({ order, track }) {
         <p className="hidden md:inline">
           {!!track.track?.album ? track.track.album.name : track.album.name}
         </p>
-        <p>
+        <p className="text-xs sm:text-base ">
           {millisToMinutesAndSeconds(
             !!track.track?.album ? track.track.duration_ms : track.duration_ms
           )}

@@ -11,6 +11,8 @@ import { useSession } from 'next-auth/react'
 import useSpotify from '../hooks/useSpotify.js'
 import { useRecoilState } from 'recoil'
 import { playlistIdState } from '../atoms/playlistAtom'
+import { showSearchState } from '../atoms/searchAtom'
+import SearchBtn from './SearchBtn.jsx'
 
 function SidebarMobile({ showMenu, handleMenu }) {
   const spotifyApi = useSpotify()
@@ -18,6 +20,18 @@ function SidebarMobile({ showMenu, handleMenu }) {
   const [playlists, setPlaylists] = useState([])
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState)
   const [showBg, setShowbg] = useState(false)
+  const [showSearch, setShowSearch] = useRecoilState(showSearchState)
+
+  // const handleShowSearch = () => setShowSearch(true)
+  const handleCloseSearch = () => {
+    setShowSearch(false)
+    handleMenu()
+  }
+
+  const handlePlaylistChange = (playlist) => {
+    setPlaylistId(playlist.id)
+    setShowSearch(false)
+  }
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -44,7 +58,7 @@ function SidebarMobile({ showMenu, handleMenu }) {
   return (
     <div
       onClick={handleMenu}
-      className={`absolute left-[-40px] h-screen w-[calc(100vw+40px)] overflow-hidden  ${
+      className={` absolute  left-[-40px] z-10 h-screen w-[calc(100vw+40px)] overflow-hidden  ${
         showBg || 'hidden'
       }`}
     >
@@ -61,15 +75,15 @@ function SidebarMobile({ showMenu, handleMenu }) {
    `}
         >
           <div className="space-y-4">
-            <button className="flex items-center space-x-2 hover:text-white">
+            <button
+              onClick={handleCloseSearch}
+              className="flex items-center space-x-2 hover:text-white"
+            >
               <HomeIcon className="h-5 w-5" />
               <p>Home</p>
             </button>
 
-            <button className="flex items-center space-x-2 hover:text-white">
-              <SearchIcon className="h-5 w-5" />
-              <p>Search</p>
-            </button>
+            <SearchBtn />
 
             <button className="flex items-center space-x-2 hover:text-white">
               <LibraryIcon className="h-5 w-5" />
@@ -100,7 +114,7 @@ function SidebarMobile({ showMenu, handleMenu }) {
               ? playlists.map((playlist) => (
                   <p
                     key={playlist.id}
-                    onClick={() => setPlaylistId(playlist.id)}
+                    onClick={() => handlePlaylistChange(playlist)}
                     className="min-w-[30ch] cursor-pointer hover:text-white"
                   >
                     {playlist.name.length > 27

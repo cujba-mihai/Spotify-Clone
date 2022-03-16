@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { MenuIcon } from '@heroicons/react/solid'
-import Sidebar from './SidebarMob'
+import SidebarMob from './SidebarMob'
 
 function BurgerMenu() {
   const [showMenu, setShowMenu] = useState(false)
@@ -9,13 +9,13 @@ function BurgerMenu() {
 
   return (
     <div className="md:hidden">
-      <div hidden={showMenu} className="absolute top-2 left-4">
+      <div hidden={showMenu} className="absolute top-5 left-4">
         <button onClick={handleMenu} className="top-0 h-10 w-10 text-white ">
           <MenuIcon className="text-white" />
         </button>
       </div>
 
-      <Sidebar showMenu={showMenu} handleMenu={handleMenu} />
+      <SidebarMob showMenu={showMenu} handleMenu={handleMenu} />
     </div>
   )
 }

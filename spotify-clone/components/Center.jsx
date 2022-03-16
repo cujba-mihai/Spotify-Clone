@@ -8,6 +8,8 @@ import useSpotify from '../hooks/useSpotify'
 import Songs from './Songs'
 
 import BurgerMenu from './BurgerMenu'
+import Search from './Search'
+import { showSearchState } from '../atoms/searchAtom'
 
 const colors = [
   'from-indigo-500',
@@ -28,6 +30,8 @@ function Center() {
   const [playlist, setPlaylist] = useRecoilState(playlistState)
   const playlistDescription = createRef()
   const [imgUrl, setImgUrl] = useState(null)
+  const showSearch = useRecoilValue(showSearchState)
+
   useEffect(() => {
     const newColor = shuffle(colors).pop()
     setColor(newColor)
@@ -49,14 +53,17 @@ function Center() {
   }, [spotifyApi, playlistId])
 
   useEffect(() => {
-    playlistDescription.current.innerHTML = playlist?.description || ''
+    if (!showSearch) {
+      playlistDescription.current.innerHTML = playlist?.description || ''
+    }
 
     if (playlist.images?.[0]?.url) {
+      console.log(playlist)
       setImgUrl(playlist.images[0].url)
     } else {
       setImgUrl('')
     }
-  })
+  }, [showSearch, playlist])
   return (
     <SessionProvider session={session}>
       <div className="h-screen flex-grow overflow-y-scroll scrollbar-hide">
@@ -77,42 +84,49 @@ function Center() {
         </header>
         <BurgerMenu />
 
-        <section
-          className={`b-to-black flex h-auto flex-col items-center space-y-7 space-x-7 bg-gradient-to-b pt-20 sm:flex-row sm:items-end sm:space-y-0 md:pt-10 ${color} p-8 text-white`}
-        >
-          {imgUrl ? (
-            <img className="h-44 w-44 shadow-2xl" src={imgUrl} alt="" />
-          ) : (
-            <div className="flex h-44 w-44 bg-gray-800 shadow-2xl">
-              <svg
-                className="m-auto"
-                width="48px"
-                height="48px"
-                viewBox="0 0 80 81"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Playlist Icon</title>
-                <path
-                  className="fill-gray-300"
-                  d="M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-            </div>
-          )}
-
+        {showSearch ? (
+          <Search />
+        ) : (
           <div>
-            <p>PLAYLIST</p>
-            <h1 className="text-2xl font-bold md:text-3xl xl:text-5xl">
-              {playlist?.name}
-            </h1>
-            <h2
-              ref={playlistDescription}
-              className="playlistDescription min-h-10 my-2"
-            ></h2>
+            {' '}
+            <section
+              className={`b-to-black flex h-auto flex-col items-center space-y-7 space-x-7 bg-gradient-to-b pt-20 sm:flex-row sm:items-end sm:space-y-0 md:pt-10 ${color} p-8 text-white`}
+            >
+              {imgUrl ? (
+                <img className="h-44 w-44 shadow-2xl" src={imgUrl} alt="" />
+              ) : (
+                <div className="flex h-44 w-44 bg-gray-800 shadow-2xl">
+                  <svg
+                    className="m-auto"
+                    width="48px"
+                    height="48px"
+                    viewBox="0 0 80 81"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>Playlist Icon</title>
+                    <path
+                      className="fill-gray-300"
+                      d="M25.6 11.565v45.38c-2.643-3.27-6.68-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4 14.4-6.46 14.4-14.4v-51.82l48-10.205V47.2c-2.642-3.27-6.678-5.37-11.2-5.37-7.94 0-14.4 6.46-14.4 14.4s6.46 14.4 14.4 14.4S80 64.17 80 56.23V0L25.6 11.565zm-11.2 65.61c-6.176 0-11.2-5.025-11.2-11.2 0-6.177 5.024-11.2 11.2-11.2 6.176 0 11.2 5.023 11.2 11.2 0 6.174-5.026 11.2-11.2 11.2zm51.2-9.745c-6.176 0-11.2-5.024-11.2-11.2 0-6.174 5.024-11.2 11.2-11.2 6.176 0 11.2 5.026 11.2 11.2 0 6.178-5.026 11.2-11.2 11.2z"
+                      fill="currentColor"
+                    ></path>
+                  </svg>
+                </div>
+              )}
+
+              <div>
+                <p>PLAYLIST</p>
+                <h1 className="text-2xl font-bold md:text-3xl xl:text-5xl">
+                  {playlist?.name}
+                </h1>
+                <h2
+                  ref={playlistDescription}
+                  className="playlistDescription min-h-10 my-2"
+                ></h2>
+              </div>
+            </section>
+            <Songs />
           </div>
-        </section>
-        <Songs />
+        )}
       </div>
     </SessionProvider>
   )

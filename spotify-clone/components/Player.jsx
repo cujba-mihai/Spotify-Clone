@@ -5,6 +5,9 @@ import useSpotify from '../hooks/useSpotify'
 import { currentTrackIdState, isPlayingState } from '../atoms/songAtom'
 import useSongInfo from '../hooks/useSongInfo'
 import { SwitchHorizontalIcon } from '@heroicons/react/outline'
+
+import SpotifyPlayer from 'react-spotify-web-playback'
+
 import {
   FastForwardIcon,
   PauseIcon,
@@ -25,14 +28,17 @@ function Player() {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayingState)
   const [volume, setVolume] = useState(50)
   const [songImgUrl, setSongImgUrl] = useState('')
+  const [trackUri, setTrackUri] = useState('')
+  const [token, setToken] = useState('')
 
   const songInfo = useSongInfo()
 
   const fetchCurrentSong = () => {
     if (!songInfo) {
       spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        console.log('Now playing: ', data.body?.item)
+        console.log('Now playing: ', data.body)
         setCurrentTrackId(data.body?.item?.id)
+        setTrackUri(data.body?.item.uri)
 
         spotifyApi.getMyCurrentPlaybackState().then((data) => {
           setIsPlaying(data.body?.is_playing)
@@ -63,7 +69,8 @@ function Player() {
     if (spotifyApi.getAccessToken() && !currentTrackId) {
       // fetch song info
       fetchCurrentSong()
-      setVolume(50)
+      setToken(spotifyApi.getAccessToken())
+      // setVolume(50)
     }
   }, [currentTrackId, spotifyApi, session])
 
@@ -83,57 +90,30 @@ function Player() {
   }, [volume])
 
   return (
-    <div className="grid h-24 w-screen grid-cols-3 bg-gradient-to-b from-black to-gray-900 px-2 text-xs text-white md:px-8 md:text-base">
-      {/* Left */}
-      <div className="flex items-center space-x-4">
-        <img className="hidden h-10 w-10 md:inline" src={songImgUrl} alt="" />
-        <div className="">
-          <h3>{songInfo?.name}</h3>
-          <p>{songInfo?.artists?.[0]?.name}</p>
+    <div className=" fixed bottom-0 w-screen">
+      {token ? (
+        <div className="bg-black sm:inline">
+          <SpotifyPlayer
+            token={token}
+            syncExternalDevice={true}
+            persistDeviceSelection={true}
+            initialVolume={volume}
+            callback={(state) => !state.isPlaying && setIsPlaying(false)}
+            play={isPlaying}
+            uris={trackUri ? trackUri : []}
+            playerPosition="bottom"
+            styles={{
+              activeColor: '#fff',
+              bgColor: 'rgb(16 16 16)',
+              color: '#b3b3b3',
+              loaderColor: '#fff',
+              sliderColor: '#1cb954',
+              trackArtistColor: '#a5a5a5',
+              trackNameColor: '#fff',
+            }}
+          />
         </div>
-      </div>
-
-      {/* Center */}
-      <div className="flex items-center justify-evenly">
-        <SwitchHorizontalIcon className="button" />
-        <RewindIcon className="button" />
-        {!isPlaying ? (
-          <PlayIcon
-            onClick={handlePlayPause}
-            className="h-10 w-10 cursor-pointer"
-          />
-        ) : (
-          <PauseIcon
-            onClick={handlePlayPause}
-            className="h-10 w-10 cursor-pointer"
-          />
-        )}
-        <FastForwardIcon className="button" />
-        <ReplyIcon className="button" />
-      </div>
-
-      {/* Right */}
-      <div className="flex items-center justify-end space-x-3 md:space-x-4">
-        <VolumeOffIcon
-          className="button"
-          onClick={() => volume > 0 && setVolume(volume - 10)}
-        />
-        <input
-          type="range"
-          min={0}
-          max={100}
-          value={volume}
-          onChange={(e) => setVolume(e.target.value)}
-        />
-        <VolumeUpIcon
-          className="button"
-          onClick={() =>
-            volume > 90
-              ? setVolume(100)
-              : volume <= 90 && setVolume(volume + 10)
-          }
-        />
-      </div>
+      ) : null}
     </div>
   )
 }

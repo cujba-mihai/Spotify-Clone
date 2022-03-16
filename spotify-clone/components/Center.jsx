@@ -7,6 +7,8 @@ import { playlistState, playlistIdState } from '../atoms/playlistAtom'
 import useSpotify from '../hooks/useSpotify'
 import Songs from './Songs'
 
+import BurgerMenu from './BurgerMenu'
+
 const colors = [
   'from-indigo-500',
   'from-blue-500',
@@ -61,7 +63,7 @@ function Center() {
         <header className="absolute top-5 right-8">
           <div
             className="flex cursor-pointer items-center space-x-3 rounded-full bg-black p-1 pr-2 text-white 
-            opacity-90 hover:opacity-80 "
+            opacity-90 hover:opacity-80"
             onClick={handleLogOut}
           >
             <img
@@ -69,14 +71,14 @@ function Center() {
               alt="Profile picture"
               className="h-10 w-10 rounded-full"
             />
-            <h2>{session?.user?.name}</h2>
+            <h2 className="hidden md:block">{session?.user?.name}</h2>
             <ChevronDownIcon className="h-5 w-5" />
           </div>
         </header>
+        <BurgerMenu />
 
         <section
-          className={`b-to-black flex items-end space-x-7 bg-gradient-to-b ${color} h-80
-        p-8 text-white`}
+          className={`b-to-black flex h-auto flex-col items-center space-y-7 space-x-7 bg-gradient-to-b pt-20 sm:flex-row sm:items-end sm:space-y-0 md:pt-10 ${color} p-8 text-white`}
         >
           {imgUrl ? (
             <img className="h-44 w-44 shadow-2xl" src={imgUrl} alt="" />

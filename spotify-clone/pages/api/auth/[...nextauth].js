@@ -45,7 +45,7 @@ export default NextAuth({
   pages: {
     signIn: "/login",
     signOut: "/login",
-    verifyRequest: "/login"
+
   },
   callbacks: {
     async jwt({ token, account, user }) {
